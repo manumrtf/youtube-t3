@@ -54,6 +54,7 @@ model User {
     accounts      Account[]
     sessions      Session[]
     Todo          Todo[]
+    role          Role      @default(USER)
 }
 
 model VerificationToken {
@@ -72,4 +73,9 @@ model Todo {
     userId      String
 
     @@index([userId])
+}
+
+enum Role {
+    USER
+    ADMIN
 }

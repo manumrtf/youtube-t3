@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { prisma } from "../../db";
-import { createTRPCRouter, publicProcedure, protectedProcedure } from "../trpc";
+import { createTRPCRouter, adminProcedure, protectedProcedure } from "../trpc";
 
 export const todosRouter = createTRPCRouter({
   createTodo: protectedProcedure
@@ -28,4 +28,20 @@ export const todosRouter = createTRPCRouter({
     });
     return todos;
   }),
+
+  deleteTodo: adminProcedure
+    .input(
+      z.object({
+        todoId: z.string(),
+      })
+    )
+    .mutation(async ({ input }) => {
+      const deletedTodo = await prisma.todo.delete({
+        where: {
+          id: input.todoId,
+        },
+      });
+
+      return deletedTodo;
+    }),
 });
